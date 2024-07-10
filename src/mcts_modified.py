@@ -117,5 +117,5 @@ def think(board: Board, current_state):
     # estimated win rate.
     best_action = get_best_action(root_node)
     
-    print(f"Action chosen: {best_action}")
+    #print(f"Action chosen: {best_action}")
     return best_action

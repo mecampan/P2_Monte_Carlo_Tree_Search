@@ -4,7 +4,7 @@ from p2_t3 import Board
 from random import choice
 from math import sqrt, log
 
-num_nodes = 100
+num_nodes = 1000
 explore_faction = 2.
 MAX_DEPTH = 100
 
@@ -196,5 +196,5 @@ def think(board: Board, current_state):
     # estimated win rate.
     best_action = get_best_action(root_node)
     
-    print(f"Action chosen: {best_action}")
+    #print(f"Action chosen: {best_action}")
     return best_action
