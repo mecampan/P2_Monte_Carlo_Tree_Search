@@ -27,7 +27,6 @@ def traverse_nodes(node: MCTSNode, board: Board, state, bot_identity: int):
         if node.parent is None:
             is_opponent = False
         else:
-            # Determine if the current node represents an opponent's move
             is_opponent = board.current_player(state) != bot_identity
 
         ucb_values = {action: ucb(child, is_opponent) for action, child in node.child_nodes.items()}
@@ -52,16 +51,10 @@ def expand_leaf(node: MCTSNode, board: Board, state):
 
     """
     if node.untried_actions:
-        # Select an untried action
+
         action = node.untried_actions.pop()
-
-        # Get the new state by applying the action
         new_state = board.next_state(state, action)
-
-        # Create a new child node
         new_node = MCTSNode(parent=node, parent_action=action, action_list=board.legal_actions(new_state))
-
-        # Add the new node to the child nodes of the current node
         node.child_nodes[action] = new_node
 
     return node, state
@@ -84,9 +77,7 @@ def rollout(board: Board, state):
         if not legal_actions:
             # If no legal actions are available, break the loop
             break
-        # Choose a random legal action
         move = choice(legal_actions)
-        # Update the state by applying the action
         state = board.next_state(state, move)
         depth += 1
 
@@ -121,15 +112,12 @@ def ucb(node: MCTSNode, is_opponent: bool):
     if node.visits == 0:
         return float('inf')  # Ensure unvisited nodes are prioritized
     
-    # Calculate the win rate
     win_rate = node.wins / node.visits
     if is_opponent:
-        win_rate = 1 - win_rate  # Invert the win rate if it's the opponent's move
+        win_rate = 1 - win_rate
 
-    # Calculate the exploration term
     exploration_term = explore_faction * sqrt(log(node.parent.visits) / node.visits)
     
-    # Calculate and return the UCB value
     return win_rate + exploration_term
 
 def get_best_action(root_node: MCTSNode):
@@ -144,12 +132,10 @@ def get_best_action(root_node: MCTSNode):
     best_action = None
     max_visits = -1
 
-    # Iterate over all child nodes (possible actions)
     for action, child in root_node.child_nodes.items():
-        # Check if the current child node has more visits than the current max_visits
         if child.visits > max_visits:
-            max_visits = child.visits  # Update max_visits
-            best_action = action  # Update best_action
+            max_visits = child.visits
+            best_action = action
 
     return best_action
 
